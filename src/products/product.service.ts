@@ -1,5 +1,6 @@
 import Product from "./Product";
 import { ProductType} from "./Types/ProductTypes";
+import fs from 'fs'
 
 class ProductService {
 
@@ -36,24 +37,60 @@ class ProductService {
         await Product.findOneAndDelete({_id: id})
         return
     }
+    async random(lista) {  
 
-    async getStock() {
 
-        const productList = await this.list()
+        const randomList: Array<ProductType> = []
 
-        const stockProducts = productList.map(item => {
-            let stock = {            
-            nome: item.nome,
-            qtde: item.qtde,
-            preco: item.preco,
-            valor_stock: item.qtde * item.preco
+        while (randomList.length < 4) {
+            const rand: Number = Math.floor(Math.random() * lista.length)
+            if(!randomList.includes(lista[rand])) {
+              randomList.push(lista[rand])
             }
-            return stock
-        })
+          
+          }
 
-        return stockProducts
+          console.log(randomList)
+        
+          return randomList
 
     }
+
+
+    async writefile() {
+        
+        const lista = await this.list()
+
+        const data = JSON.stringify(lista)
+
+        fs.writeFile('products.json', data, (err) => {
+            if (err){
+                throw err;
+            }
+            else{
+                console.log("Dados gravados com sucesso")
+            }
+        })
+    }
+
+    async readProductsFile() {
+
+    
+        try {
+            const data = fs.readFileSync('products.json')
+            console.log("Lendo dados!")
+            return JSON.parse(data)
+
+        } catch (err) {
+            console.log("Erro na hora de ler produtos:", err)
+        
+        }
+
+        
+
+    }
+
+
 
 }
 

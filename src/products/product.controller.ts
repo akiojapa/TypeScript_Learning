@@ -32,10 +32,24 @@ class ProductController {
         return res.status(200).json("Successfully deleted Product!")
     }
 
-    public async stock(req: Request, res: Response) {
-        const stock = await ProductService.getStock()
+    async random (req: Request, res: Response) {
+        const randomobj = await ProductService.random(await ProductService.list())
 
-        return res.status(200).json(stock)
+        return res.status(200).json(randomobj)
+    }
+
+    async ProductreadFile(req: Request, res: Response) {
+
+        const data = await ProductService.readProductsFile()
+
+        res.status(200).json(data)
+
+    }
+
+    async ProductWriteFile(req: Request, res: Response) {
+        const data = await ProductService.writefile()
+
+        res.status(200).json(data)
     }
     
 
