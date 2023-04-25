@@ -45,6 +45,12 @@ class PokemonController {
         return res.status(200).json(result)
     }
 
+    async savetype(req: Request, res: Response) {
+        const pokemon = await pokemonService.saveTypes()
+
+        return res.status(200).json(pokemon)
+    }
+    
     async findDex(req: Request, res: Response) {
         const Pokemon = await PokemonService.findByDex(req.params.dex)
 

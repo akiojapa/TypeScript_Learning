@@ -1,4 +1,3 @@
-import pokemon from "./pokemon";
 import Pokemon from "./pokemon";
 import { PokemonType} from "./Types/PokemonTypes";
 import {writeFile, readFile} from 'fs/promises'
@@ -112,9 +111,40 @@ class PokemonService {
             }
             
         })
-
         writeFile('pokeData.json', JSON.stringify( await Promise.all(pokeList), null, 2))
         return await Promise.all(pokeList)
+    }
+
+    async saveTypes() {
+                
+        const pokeList = JSON.parse(await readFile('pokeData.json', "utf-8"))
+
+        let typeList = {}
+
+        pokeList.map(pokemon => {
+            for (const element of pokemon[0].types){
+                if(element in typeList) {
+                    console.log()
+                }
+                else {
+                    typeList[element] = []
+                }
+            }
+        })
+
+        pokeList.map(pokemon => {
+            for (const element of pokemon[0].types){
+                if(typeList[element]) {
+                    delete pokemon[0]["types"]
+                    typeList[element].push({
+                        ...pokemon
+                    })
+                }
+            }
+        })
+
+        writeFile('pokeType.json', JSON.stringify(typeList, null, 2))
+        
     }
 
     async findByDex(id) {
